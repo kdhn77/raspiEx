@@ -26,7 +26,7 @@ int main(int argc, char*argv[])
 		printf("input signal num : %d \n",num);
 		kill(pid,num);
 		loopcount++;
-		sleep(1);
+		//sleep(1);
 	}
 	return 0;
 }
