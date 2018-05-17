@@ -7,22 +7,31 @@
 #include <fcntl.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
-char buf[100];
+char buf[BUFSIZ];
+char tbuf[BUFSIZ];
+int chk_sw2=0;
 void sigHandler(int signo)
 {
+	time_t UTCtime;
+	struct tm *tm;
+	time(&UTCtime);;
+	tm=localtime(&UTCtime);
+	 strftime(tbuf,sizeof(tbuf),"%Y-%m-%d %H:%M:%S",tm);//yyyy-mm-dd hh:mm:ss
 	switch(signo)
 	{
 	case 2:
-		sprintf(buf,"Catch SIGINT\n");
+		chk_sw2=1;
+		sprintf(buf,"%s [SIGINT]\n",tbuf);
 		printf("Catch 2\n");
 		break;
 	case 10:
-		sprintf(buf,"Catch SIGUSR1\n");
+		sprintf(buf,"%s [SIGUSR1]\n",tbuf);
 		printf("Catch 10\n");
 		break;
 	case 12:
-		sprintf(buf,"Catch SIGUSR2\n");
+		sprintf(buf,"%s [SIGUSR2]\n",tbuf);
 		printf("Catch 12\n");
 		break;
 	default:
@@ -43,7 +52,7 @@ int main(void)
 	{
 		pause();
 		byteCount=write(fd,buf,strlen(buf));
-		if(strcmp(buf,"Catch SIGINT\n")==0)
+		if(chk_sw2==1)
 			break;
 	}
 	close(fd);
