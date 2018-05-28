@@ -4,7 +4,7 @@
 #include <unistd.h>
 static void sig_quit(int signo)
 {
-	printf("caught SIGQUIT\n");
+	printf("caught SIGQUIT :%d\n",signo);
 	if(signal(SIGQUIT,SIG_DFL)==SIG_ERR)
 		printf("can't reset SIGQUIT");
 }
@@ -20,7 +20,7 @@ int main(void)
 	sigaddset(&newmask,SIGQUIT);
 	if(sigprocmask(SIG_BLOCK,&newmask,&oldmask)<0)
 		printf("SIG_BLOCK error");
-
+	printf("SIGQUIT is blocked\n");
 	sleep(5); /*SIGQUIT here will remain pending*/
 	if (sigpending(&pendmask)<0)
 		printf("sigpending error");
